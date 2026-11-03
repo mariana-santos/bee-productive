@@ -13,15 +13,24 @@ export async function createContext() {
 export type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create({
-  // Quando a falha vem da validação do Zod, anexamos os erros por campo à
-  // resposta. Assim o frontend consegue mostrar a mensagem ao lado do campo.
+  // Por padrão o tRPC inclui o stack trace na resposta fora de produção.
+  // Desligamos para nunca expor detalhes internos ao cliente.
+  isDev: false,
   errorFormatter({ shape, error }) {
+    const zodError = error.cause instanceof ZodError ? z.flattenError(error.cause) : null;
+
+    // Erros inesperados (ex.: exceção não tratada) podem carregar detalhes de
+    // implementação na mensagem, então o cliente recebe só um texto genérico.
+    // Erros de validação já trazem os detalhes por campo em `zodError`, então
+    // a mensagem principal fica curta em vez do JSON cru das issues.
+    let message = shape.message;
+    if (error.code === "INTERNAL_SERVER_ERROR") message = "Erro interno do servidor";
+    else if (zodError) message = "Dados inválidos";
+
     return {
       ...shape,
-      data: {
-        ...shape.data,
-        zodError: error.cause instanceof ZodError ? z.flattenError(error.cause) : null,
-      },
+      message,
+      data: { ...shape.data, zodError },
     };
   },
 });

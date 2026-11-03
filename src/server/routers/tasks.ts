@@ -5,8 +5,10 @@ import * as store from "../tasks/store";
 
 // O store retorna undefined/false quando a tarefa não existe; aqui isso vira
 // um NOT_FOUND com mensagem clara, que chega ao cliente como erro tipado.
-function notFound(id: string) {
-  return new TRPCError({ code: "NOT_FOUND", message: `Tarefa com id "${id}" não encontrada` });
+// A validação dos inputs não se repete aqui: o .input() com Zod já responde
+// BAD_REQUEST antes do procedure rodar.
+function notFound() {
+  return new TRPCError({ code: "NOT_FOUND", message: "Tarefa não encontrada" });
 }
 
 export const tasksRouter = router({
@@ -16,7 +18,7 @@ export const tasksRouter = router({
 
   getById: publicProcedure.input(idSchema).query(({ input }) => {
     const task = store.getById(input.id);
-    if (!task) throw notFound(input.id);
+    if (!task) throw notFound();
     return task;
   }),
 
@@ -25,12 +27,12 @@ export const tasksRouter = router({
   update: publicProcedure.input(updateTaskSchema).mutation(({ input }) => {
     const { id, ...changes } = input;
     const task = store.update(id, changes);
-    if (!task) throw notFound(id);
+    if (!task) throw notFound();
     return task;
   }),
 
   delete: publicProcedure.input(idSchema).mutation(({ input }) => {
-    if (!store.remove(input.id)) throw notFound(input.id);
+    if (!store.remove(input.id)) throw notFound();
     return { id: input.id };
   }),
 });
