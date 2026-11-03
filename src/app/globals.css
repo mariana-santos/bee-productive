@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Identidade visual do Bee Productive.
+ *
+ * Os tokens ficam no @theme do Tailwind v4: cada variável vira uma utility
+ * (--color-honey -> bg-honey, text-honey, border-honey; --radius-card -> rounded-card)
+ * e também fica disponível como variável CSS comum (var(--color-honey)).
+ * O design é só claro, então não há variações de tema escuro.
+ */
+@theme {
+  /* Mel: a cor da marca, usada na ação principal e nos destaques. */
+  --color-honey: #f5c02e;
+  --color-honey-strong: #e0a800; /* borda do botão primário e contornos tracejados */
+  --color-honey-soft: #fdf0c2; /* fundo de toast de sucesso e badges */
+  --color-honey-soft-border: #efd27a;
+  --color-honey-ink: #6b4e00; /* texto sobre honey-soft */
+
+  /* Superfícies */
+  --color-canvas: #faf9f5; /* marfim: fundo da página */
+  --color-surface: #ffffff; /* cards, formulários, campos */
+  --color-surface-muted: #f5f3ec; /* campos e botões desabilitados */
+
+  /* Texto */
+  --color-ink: #2b2a27; /* grafite: texto principal */
+  --color-ink-muted: #5e5d59; /* texto secundário */
+  --color-ink-subtle: #6b6a65; /* datas, "(opcional)", texto desabilitado */
+
+  /* Linhas */
+  --color-line: #e8e6dc; /* bordas de cards e divisórias */
+  --color-line-strong: #d9d6ca; /* bordas de campos e botões secundários */
+
+  /* Skeleton de carregamento */
+  --color-skeleton: #edebe3;
+  --color-skeleton-soft: #f3f1ea;
+
+  /* Erro */
+  --color-danger: #b3261e;
+  --color-danger-soft: #fceeec;
+  --color-danger-border: #ebc5c1;
+  --color-danger-ink: #8c1d17; /* texto sobre danger-soft */
+  --color-danger-ink-soft: #5e2a26;
+
+  /* Fontes: as variáveis --font-dm-sans e --font-bricolage vêm do next/font (layout.tsx). */
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+
+  /* Escala de texto do design que não existe no Tailwind padrão
+     (text-sm = 14px, text-base = 16px e text-2xl = 24px já cobrem o resto). */
+  --text-caption: 13px; /* datas e eyebrows em caixa alta */
+  --text-body: 15px; /* labels, botões e descrições */
+  --text-lead: 17px; /* título do card e texto de destaque */
+  --text-title-sm: 22px; /* marca no header, títulos de estado vazio */
+  --text-title: 26px;
+  --text-title-lg: 36px; /* título das páginas de formulário */
+  --text-display: 40px; /* título da listagem */
+
+  /* Raios */
+  --radius-field: 10px; /* inputs e textareas */
+  --radius-toast: 12px;
+  --radius-card: 14px; /* card de tarefa */
+  --radius-panel: 16px; /* formulário e blocos de estado */
+
+  /* Larguras máximas de conteúdo: max-w-page e max-w-form */
+  --container-page: 880px;
+  --container-form: 640px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  /* Anel de foco em grafite: o mel não tem contraste suficiente (3:1) sobre o marfim. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-honey-soft);
+    color: var(--color-ink);
+  }
+
+  /* Campos herdam a fonte do app em vez da fonte padrão do navegador. */
+  input,
+  textarea,
+  button {
+    font: inherit;
+  }
+
+  ::placeholder {
+    color: var(--color-ink-subtle);
+  }
 }
