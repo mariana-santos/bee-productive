@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
-import { Header } from "@/components/header";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
@@ -30,11 +29,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${dmSans.variable} ${bricolage.variable} h-full antialiased`}>
+      {/* O <Header> fica em cada página, porque a ação dele muda por tela (só a listagem tem "Nova tarefa"). */}
       <body className="flex min-h-full flex-col">
-        <TRPCReactProvider>
-          <Header />
-          <div className="flex flex-1 flex-col">{children}</div>
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );
