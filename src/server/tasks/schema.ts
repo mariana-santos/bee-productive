@@ -44,17 +44,21 @@ export const idSchema = z.object({
   id: z.string().min(1),
 });
 
-export const listTasksSchema = z.object({
-  // `cursor` é o índice inicial da página. Aceita null porque o infinite query
-  // do tRPC envia null na primeira página; nesse caso começamos do 0.
-  cursor: z
-    .number()
-    .int()
-    .min(0)
-    .nullish()
-    .transform((cursor) => cursor ?? 0),
-  limit: z.number().int().min(1).max(50).default(10),
-});
+export const listTasksSchema = z
+  .object({
+    // `cursor` é o índice inicial da página. Aceita null porque o infinite query
+    // do tRPC envia null na primeira página; nesse caso começamos do 0.
+    cursor: z
+      .number()
+      .int()
+      .min(0)
+      .nullish()
+      .transform((cursor) => cursor ?? 0),
+    limit: z.number().int().min(1).max(50).default(10),
+  })
+  // Sem input nenhum (ex.: abrir /api/trpc/tasks.list no navegador), o `{}` passa
+  // pelo schema e ganha os defaults de cursor e limit.
+  .prefault({});
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
