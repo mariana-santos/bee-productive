@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Header } from "@/components/header";
 import { EmptyHive, LostHive } from "@/components/illustrations";
 import { Logo } from "@/components/logo";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field } from "@/components/ui/field";
@@ -92,6 +93,14 @@ export default function DesignSystem() {
           </div>
         </Section>
 
+        <Section title="Alert">
+          <Alert
+            title="Não foi possível carregar as tarefas"
+            description="Verifique sua conexão e tente novamente."
+            action={<Button variant="danger">Tentar novamente</Button>}
+          />
+        </Section>
+
         <Section title="Toast">
           <ToastDemo />
         </Section>
@@ -101,7 +110,7 @@ export default function DesignSystem() {
             <EmptyState
               icon={<EmptyHive />}
               title="A colmeia está vazia"
-              description="Crie sua primeira tarefa para começar a zumbir."
+              description="Crie sua primeira tarefa para começar a produzir mel."
               action={<Button href="/tasks/new">Nova tarefa</Button>}
             />
             <EmptyState
