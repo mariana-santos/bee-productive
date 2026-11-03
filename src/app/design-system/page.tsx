@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Header } from "@/components/header";
+import { EmptyHive, LostHive } from "@/components/illustrations";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Field } from "@/components/ui/field";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = { title: "Design system" };
 
@@ -58,6 +61,54 @@ export default function DesignSystem() {
               placeholder="Detalhes, links, o que precisar."
             />
             <Field label="Título" required defaultValue="Planejar a sprint" disabled />
+          </div>
+        </Section>
+
+        <Section title="Skeleton">
+          <div className="grid items-start gap-6 sm:grid-cols-2">
+            {/* Card da listagem carregando */}
+            <div
+              aria-busy="true"
+              className="flex flex-col gap-2.5 rounded-card border border-line bg-surface p-5"
+            >
+              <span className="sr-only">Carregando tarefa...</span>
+              <Skeleton className="h-3.5 w-3/5" />
+              <Skeleton soft className="h-2.5 w-[90%]" />
+              <Skeleton soft className="h-2.5 w-[35%]" />
+            </div>
+            {/* Formulário de edição carregando */}
+            <div
+              aria-busy="true"
+              className="flex flex-col gap-3.5 rounded-panel border border-line bg-surface p-5"
+            >
+              <span className="sr-only">Carregando formulário...</span>
+              <Skeleton className="h-3 w-[30%]" />
+              <Skeleton soft block className="h-11" />
+              <Skeleton className="h-3 w-[40%]" />
+              <Skeleton soft block className="h-24" />
+              <Skeleton soft className="h-11 w-36 self-end" />
+            </div>
+          </div>
+        </Section>
+
+        <Section title="EmptyState">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <EmptyState
+              icon={<EmptyHive />}
+              title="A colmeia está vazia"
+              description="Crie sua primeira tarefa para começar a zumbir."
+              action={<Button href="/tasks/new">Nova tarefa</Button>}
+            />
+            <EmptyState
+              icon={<LostHive />}
+              title="Essa tarefa voou para longe"
+              description="Ela pode ter sido excluída ou o link está incorreto."
+              action={
+                <Button variant="secondary" href="/">
+                  Voltar para tarefas
+                </Button>
+              }
+            />
           </div>
         </Section>
       </main>
