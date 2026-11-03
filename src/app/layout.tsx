@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { Header } from "@/components/header";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${dmSans.variable} ${bricolage.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Header />
+          <div className="flex flex-1 flex-col">{children}</div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
