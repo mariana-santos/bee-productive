@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ToastDemo } from "./toast-demo";
 
 export const metadata: Metadata = { title: "Design system" };
 
@@ -89,6 +90,10 @@ export default function DesignSystem() {
               <Skeleton soft className="h-11 w-36 self-end" />
             </div>
           </div>
+        </Section>
+
+        <Section title="Toast">
+          <ToastDemo />
         </Section>
 
         <Section title="EmptyState">
