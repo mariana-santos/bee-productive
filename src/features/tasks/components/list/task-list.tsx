@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 import { taskListInput, taskListOptions } from "../../list-query";
 import { LoadMore } from "./load-more";
+import { TaskItem } from "./task-item";
 import { TaskListEmpty } from "./task-list-empty";
 import { TaskListSkeleton } from "./task-list-skeleton";
 
@@ -48,10 +49,7 @@ export function TaskList() {
     <div>
       <ul className="flex flex-col gap-3">
         {tasks.map((task) => (
-          // Provisório: o TaskCard (título, descrição, data e ações) entra aqui.
-          <li key={task.id} className="rounded-card border border-line bg-surface px-[22px] py-5">
-            <h2 className="text-lead font-bold">{task.title}</h2>
-          </li>
+          <TaskItem key={task.id} task={task} />
         ))}
       </ul>
 
