@@ -14,7 +14,13 @@ function notFound() {
 export const tasksRouter = router({
   // Recebe `cursor` e `limit` e devolve `nextCursor`, o formato que o
   // useInfiniteQuery do tRPC espera para buscar a próxima página.
-  list: publicProcedure.input(listTasksSchema).query(({ input }) => store.list(input)),
+  list: publicProcedure.input(listTasksSchema).query(async ({ input }) => {
+    // Atraso artificial só nas páginas seguintes: o store em memória responde na
+    // hora, e assim dá para ver o "Carregando mais tarefas..." do scroll infinito.
+    // A primeira página (cursor 0, usada no SSR) não espera.
+    if (input.cursor > 0) await new Promise((resolve) => setTimeout(resolve, 800));
+    return store.list(input);
+  }),
 
   getById: publicProcedure.input(idSchema).query(({ input }) => {
     const task = store.getById(input.id);

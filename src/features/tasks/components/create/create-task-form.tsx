@@ -30,10 +30,20 @@ export function CreateTaskForm() {
         // pathFilter pega todas as páginas da infinite query de uma vez.
         await queryClient.invalidateQueries(trpc.tasks.list.pathFilter());
         toast.success("Tarefa criada! A colmeia agradece.");
+        resetForm();
         router.push("/");
       },
     }),
   );
+
+  // Com Cache Components, o Next guarda o estado de páginas já visitadas
+  // (via <Activity>): sem limpar, o formulário reapareceria preenchido ao voltar.
+  function resetForm() {
+    setTitle("");
+    setDescription("");
+    setErrors({});
+    createTask.reset();
+  }
 
   function showErrors(next: FieldErrors) {
     setErrors(next);
@@ -111,7 +121,7 @@ export function CreateTaskForm() {
       />
 
       <div className="flex flex-wrap justify-end gap-2.5">
-        <Button variant="secondary" href="/">
+        <Button variant="secondary" href="/" onClick={resetForm}>
           Cancelar
         </Button>
         <Button type="submit" loading={pending && "Criando..."}>
