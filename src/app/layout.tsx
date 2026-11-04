@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
@@ -33,6 +34,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       {/* O <Header> fica em cada página, porque a ação dele muda por tela (só a listagem tem "Nova tarefa"). */}
       <body className="flex min-h-full flex-col">
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        {/* O footer é igual em todas as telas, então fica aqui; mt-auto o empurra para o fim em páginas curtas. */}
+        <Footer />
         {/* Um Toaster só, no layout: os toasts sobrevivem à navegação (ex.: criar e voltar para a listagem). */}
         <Toaster />
       </body>
