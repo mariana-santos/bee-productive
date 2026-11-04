@@ -10,12 +10,15 @@
  * undefined/false, e os procedures do tRPC decidem qual erro devolver.
  */
 import type { CreateTaskInput, ListTasksInput, Task } from "./schema";
+import { createSeedTasks } from "./seed";
 
 // Em dev, o hot reload do Next reavalia este módulo a cada alteração, o que
 // recriaria o Map e apagaria as tarefas. Guardar o Map em globalThis faz ele
 // sobreviver às recargas, já que globalThis é o mesmo durante todo o processo.
+// O seed entra só na criação do Map, ou seja, uma vez por processo: recargas
+// não duplicam as tarefas nem trazem de volta as que foram excluídas.
 const globalForTasks = globalThis as unknown as { tasks?: Map<string, Task> };
-const tasks = (globalForTasks.tasks ??= new Map<string, Task>());
+const tasks = (globalForTasks.tasks ??= new Map(createSeedTasks().map((task) => [task.id, task])));
 
 type TaskChanges = Partial<CreateTaskInput>;
 
