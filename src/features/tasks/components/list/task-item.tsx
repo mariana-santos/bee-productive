@@ -1,14 +1,7 @@
 import { Button } from "@/components/ui/button";
 import type { Task } from "@/server/tasks/schema";
+import { formatDate } from "../../format";
 import { DeleteTaskButton } from "./delete-task-button";
-
-// Fuso fixo: o SSR roda no fuso do servidor e o navegador no da pessoa; sem
-// isso, a hora do HTML e a da hidratação podem diferir e o React acusa mismatch.
-const dateFormat = new Intl.DateTimeFormat("pt-BR", {
-  dateStyle: "short",
-  timeStyle: "short",
-  timeZone: "America/Sao_Paulo",
-});
 
 export function TaskItem({ task }: { task: Task }) {
   return (
@@ -33,7 +26,7 @@ export function TaskItem({ task }: { task: Task }) {
           )}
           <p className="mt-2.5 text-caption text-ink-subtle">
             Criada em{" "}
-            <time dateTime={task.createdAt.toISOString()}>{dateFormat.format(task.createdAt)}</time>
+            <time dateTime={task.createdAt.toISOString()}>{formatDate(task.createdAt)}</time>
           </p>
         </div>
       </div>
